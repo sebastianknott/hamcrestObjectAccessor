@@ -1,0 +1,6 @@
+vendor
+phpdocker
+public
+docker-compose.yml
+.idea
+composer.lock
