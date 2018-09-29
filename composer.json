@@ -1,6 +1,7 @@
 {
     "name": "sebastianknott/hamcrest-object-accessor",
     "description": "Adds a Matcher to Hamcrest which can access properties and methods of objects.",
+    "license": "GPL-3.0-or-later",
     "type": "library",
     "require": {
         "php": ">=5.6",
