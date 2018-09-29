@@ -1,4 +1,4 @@
-![Travis Build State]("https://api.travis-ci.org/doomhammerchen/hamcrestObjectAccessor.svg?branch=master")
+[![Build Status](https://www.travis-ci.org/doomhammerchen/hamcrestObjectAccessor.svg?branch=master)](https://www.travis-ci.org/doomhammerchen/hamcrestObjectAccessor)
 # Hamcrest Object Accessor
 
 This package extends the collection of matchers in 
