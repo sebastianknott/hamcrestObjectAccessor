@@ -70,8 +70,7 @@ MatcherAssert::assertThat(
 
 ## Installation
 
-Once it's released on Packagist you may include this package
-by composer
+You may include this package by composer.
 
 `composer require --dev sebastianknott/hamcrest-object-accessor`
 
