@@ -4,6 +4,7 @@ namespace SebastianKnott\HamcrestObjectAccessor;
 
 use Hamcrest\Description;
 use Hamcrest\Matcher;
+use Hamcrest\Matchers;
 use Hamcrest\TypeSafeDiagnosingMatcher;
 use Hamcrest\MatcherAssert;
 use Hamcrest\TypeSafeMatcher;
@@ -38,7 +39,7 @@ class HasProperty extends TypeSafeDiagnosingMatcher
     {
         parent::__construct(TypeSafeMatcher::TYPE_OBJECT);
 
-        MatcherAssert::assertThat($propertyName, typeOf('string'));
+        MatcherAssert::assertThat($propertyName, Matchers::typeOf('string'));
 
         $this->propertyName         = $propertyName;
         $this->propertyValueMatcher = $propertyValueMatcher;
