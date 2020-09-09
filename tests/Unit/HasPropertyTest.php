@@ -61,8 +61,17 @@ class HasPropertyTest extends TestCase
 
     public function matchesReturnsExpectedResultDataProvider()
     {
+        return array_merge(
+            $this->matchesReturnsExpectedResultDataProviderSimple(),
+            [
+                'object without property' => [new stdClass(), 'bla', 'blub', false]
+            ]
+        );
+    }
+
+    public function matchesReturnsExpectedResultDataProviderSimple()
+    {
         return [
-            'object without property' => [new stdClass(), 'bla', 'blub', false],
             'object with property'    => [
                 new HasPropertyFixture(),
                 'bla',
@@ -90,6 +99,7 @@ class HasPropertyTest extends TestCase
         ];
     }
 
+
     /**
      * @test
      * @dataProvider matchesReturnsExpectedResultDataProvider
@@ -112,12 +122,11 @@ class HasPropertyTest extends TestCase
 
     /**
      * @test
-     * @dataProvider matchesReturnsExpectedResultDataProvider
+     * @dataProvider matchesReturnsExpectedResultDataProviderSimple
      *
      * @param mixed $item
      * @param string $propertyName
      * @param string $propertyValue
-     * @param bool $expectedResult
      */
     public function describeMismatchSafelyReturnsExpectedResult(
         $item,
@@ -132,6 +141,30 @@ class HasPropertyTest extends TestCase
                 . '"get' . ucfirst($propertyName) . '()", "' . $propertyName . '()", "is' . ucfirst($propertyName)
                 . '()", "has' . ucfirst($propertyName) . '()", "__get()", '
                 . '"__call()" exist and have public access in class "stdClass" '
+            )->andReturnSelf();
+        $mockedDescription->shouldReceive('appendText')->once()
+            ->with('was ')->andReturnSelf();
+        $mockedDescription->shouldReceive('appendValue')->once()
+            ->with('blub')->andReturnSelf();
+
+        $subject = HasProperty::hasProperty($propertyName, $propertyValue);
+        $subject->describeMismatchSafely($item, $mockedDescription);
+    }
+
+    /**
+     * @test
+     *
+     */
+    public function describeMismatchSafelyReturnsExpectedResultForStdClass(
+    ) {
+        $item = new stdClass();
+        $propertyName = 'bla';
+        $propertyValue = 'blub';
+        /** @var MockInterface|Description $mockedDescription */
+        $mockedDescription = Mockery::mock(Description::class);
+        $mockedDescription->shouldReceive('appendText')->once()
+            ->with(
+                'can\'t get a way to read the property "'. $propertyName .'" in class "stdClass" '
             )->andReturnSelf();
         $mockedDescription->shouldReceive('appendText')->once()
             ->with('was ')->andReturnSelf();
