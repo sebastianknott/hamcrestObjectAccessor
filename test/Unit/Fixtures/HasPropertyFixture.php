@@ -6,29 +6,25 @@ namespace SebastianKnott\HamcrestObjectAccessor\Test\Unit\Fixtures;
 
 class HasPropertyFixture
 {
-    /** @var string */
-    public $bla = 'blub';
+    public string $bla = 'blub';
 
-    /** @var string */
-    private $getable = 'blub';
+    private string $getable = 'blub';
 
-    /** @var bool */
-    private $issable = true;
+    private bool $issable = true;
 
-    /** @var bool */
-    private $hassable = true;
+    private bool $hassable = true;
 
-    public function getGetable()
+    public function getGetable(): string
     {
         return $this->getable;
     }
 
-    public function isIssable()
+    public function isIssable(): bool
     {
         return $this->issable;
     }
 
-    public function hasHassable()
+    public function hasHassable(): bool
     {
         return $this->hassable;
     }

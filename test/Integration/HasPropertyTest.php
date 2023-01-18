@@ -36,7 +36,7 @@ class HasPropertyTest extends DevToolsTestCase
     public function hasPropertyThrowsExpectedException(): void
     {
         $this->expectException(AssertionError::class);
-        $this->expectExceptionMessageRegExp(
+        $this->expectExceptionMessageMatches(
             '/(.*neither the property "blarg" nor one of the methods.*)'
             . '|(.*can\'t get a way to read the property "blarg" in class '
             . '"SebastianKnott\\\\HamcrestObjectAccessor\\\\Test\\\\Unit\\\\Fixtures\\\\HasPropertyFixture").*/'

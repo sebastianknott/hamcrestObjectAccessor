@@ -11,8 +11,8 @@ set('application', 'sebastianknot/hamrestObjectAccessor');
 set('release_path', __DIR__);
 set('allow_anonymous_stats', false);
 
-desc('Check for source compatibility to PHP 7.2');
-task('sca:phpcs:compat7.2', 'vendor/bin/phpcs --standard=PHPCompatibility --runtime-set testVersion 7.2 src');
+desc('Check for source compatibility to PHP 8.1');
+task('sca:phpcs:compat8.1', 'vendor/bin/phpcs --standard=PHPCompatibility --runtime-set testVersion 8.1 src');
 
 desc('Check for messy code with vimeos psalm');
 task(
@@ -34,5 +34,5 @@ task(
 
 task(
     'sca',
-    ['sca:lint', 'sca:phpcs', 'sca:phpcs:compat7.2', 'sca:phpstan', 'sca:psalm', 'sca:phpmd', 'sca:phpcpd']
+    ['sca:lint', 'sca:phpcs', 'sca:phpcs:compat8.1', 'sca:phpstan', 'sca:psalm', 'sca:phpmd', 'sca:phpcpd']
 )->once();
