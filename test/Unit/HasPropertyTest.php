@@ -7,7 +7,6 @@ namespace SebastianKnott\HamcrestObjectAccessor\Test\Unit;
 use Hamcrest\Description;
 use Hamcrest\Matcher;
 use Hamcrest\Matchers;
-use InvalidArgumentException;
 use Mockery\LegacyMockInterface;
 use Mockery\MockInterface;
 use SebastianKnott\DevUtils\Test\Infrastructure\DevToolsTestCase;
@@ -17,14 +16,11 @@ use stdClass;
 
 class HasPropertyTest extends DevToolsTestCase
 {
-    /** @var string */
-    private $propertyName;
+    private string $propertyName;
 
-    /** @var Matcher|LegacyMockInterface|MockInterface $mockedMatcher */
-    private $mockedMatcher;
+    private Matcher|LegacyMockInterface|MockInterface $mockedMatcher;
 
-    /** @var HasProperty */
-    private $subject;
+    private HasProperty $subject;
 
     /**
      * @test
@@ -96,16 +92,12 @@ class HasPropertyTest extends DevToolsTestCase
      * @test
      * @dataProvider matchesReturnsExpectedResultDataProvider
      *
-     * @param HasPropertyFixture|stdClass $item
-     * @param string                      $propertyName
-     * @param mixed                       $propertyValue
-     * @param bool                        $expectedResult
      */
     public function matchesSafelyReturnsExpectedResult(
-        $item,
+        HasPropertyFixture|stdClass $item,
         string $propertyName,
-        $propertyValue,
-        bool $expectedResult
+        mixed $propertyValue,
+        bool $expectedResult,
     ): void {
         $subject = HasProperty::hasProperty($propertyName, $propertyValue);
         $result  = $subject->matchesSafely($item);
@@ -115,7 +107,7 @@ class HasPropertyTest extends DevToolsTestCase
     /**
      * @test
      */
-    public function describeMismatchSafelyReturnsExpectedResult()
+    public function describeMismatchSafelyReturnsExpectedResult(): void
     {
         $item          = new stdClass();
         $propertyName  = 'bla';
@@ -149,17 +141,6 @@ class HasPropertyTest extends DevToolsTestCase
     {
         $result = $this->subject->matches('asd');
         self::assertFalse($result);
-    }
-
-    /**
-     * @test
-     */
-    public function constructorPropertyNameNeedsToBeString(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionCode(1596896381);
-
-        new HasProperty(new stdClass(), objectValue());
     }
 
     /**
