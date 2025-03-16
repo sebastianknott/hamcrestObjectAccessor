@@ -8,8 +8,6 @@ if (!function_exists('hasProperty')) {
     /**
      * This Matcher tries to access a property of an object by name. It uses
      * Getters, public properties, hassers and issers.
-     *
-     *
      */
     function hasProperty(string $propertyName, mixed $propertyValueMatcher): HasProperty
     {

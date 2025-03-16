@@ -1,0 +1,51 @@
+on:
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.3', '8.4']
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP and Composer
+        uses: shivammathur/setup-php@a4e22b60bbb9c1021113f2860347b0759f66fe5d
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: gd
+          tools: cs2pr, composer
+        env:
+          fail-fast: true
+
+      - name: 'Determine composer cache directory'
+        id: 'determine-composer-cache-directory'
+        run: 'echo "::set-output name=directory::$(composer config cache-dir)"'
+
+      - name: Cache Composer Packages
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-composer
+        with:
+          path: '${{ steps.determine-composer-cache-directory.outputs.directory }}'
+          key: ${{ runner.os }}-codestyle-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-codestyle-${{ env.cache-name }}
+
+      - name: 'Validate composer.json and composer.lock'
+        run: 'composer validate'
+
+      - name: Install Dependencies
+        run: 'composer install --no-progress --no-suggest'
+
+      - name: Check Coding-Standard
+        run: |
+          set +e
+          composer ci
+          CS_EXIT=$?
+          trap "cs2pr ./tmp/phpcs/checkstyle" EXIT
+          exit $CS_EXIT
+
