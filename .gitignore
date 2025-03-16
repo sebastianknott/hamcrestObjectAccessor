@@ -5,10 +5,11 @@ docker-compose.yml
 .idea
 composer.lock
 
+!/tmp/phpcs/.keep
 /tmp/*
-!/tmp/.keep
 
 .phpunit.result.cache
+.phpunit.cache
 
 infection.log
 

@@ -8,5 +8,3 @@ parameters:
         maximumNumberOfProcesses: 4
     fileExtensions:
         - php
-    ignoreErrors:
-        - '#Call to an undefined method Mockery\\ExpectationInterface|Mockery\\HigherOrderMessage::once\(\).#'

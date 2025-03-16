@@ -9,6 +9,7 @@ use Hamcrest\Matcher;
 use Hamcrest\TypeSafeDiagnosingMatcher;
 use Hamcrest\TypeSafeMatcher;
 use Hamcrest\Util;
+use Override;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -37,14 +38,14 @@ class HasProperty extends TypeSafeDiagnosingMatcher
      * Generates a description of the object. The description may be part
      * of a description of a larger object of which this is just a component,
      * so it should be worded appropriately.
-     *
-     *
      */
+
+    #[Override]
     public function describeTo(Description $description): void
     {
         $description->appendText(
             'an object with public property "' . $this->propertyName
-            . '" with a value matching '
+            . '" with a value matching ',
         );
         $this->propertyValueMatcher->describeTo($description);
     }
@@ -52,9 +53,9 @@ class HasProperty extends TypeSafeDiagnosingMatcher
     /**
      * Subclasses should implement these. The item will already have been checked for
      * the specific type.
-     *
-     *
      */
+
+    #[Override]
     protected function matchesSafelyWithDiagnosticDescription(mixed $item, Description $mismatchDescription): ?bool
     {
         $propertyValue = null;

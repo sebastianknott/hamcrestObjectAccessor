@@ -7,44 +7,55 @@ namespace SebastianKnott\HamcrestObjectAccessor\Test\Unit;
 use Hamcrest\Description;
 use Hamcrest\Matcher;
 use Hamcrest\Matchers;
-use Mockery\LegacyMockInterface;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
-use SebastianKnott\DevUtils\Test\Infrastructure\DevToolsTestCase;
+use Override;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use SebastianKnott\HamcrestObjectAccessor\HasProperty;
 use SebastianKnott\HamcrestObjectAccessor\Test\Unit\Fixtures\HasPropertyFixture;
 use stdClass;
 
-class HasPropertyTest extends DevToolsTestCase
+#[CoversClass(HasProperty::class)]
+class HasPropertyTest extends MockeryTestCase
 {
     private string $propertyName;
 
-    private Matcher|LegacyMockInterface|MockInterface $mockedMatcher;
+    private Matcher&MockInterface $mockedMatcher;
 
     private HasProperty $subject;
 
-    /**
-     * @test
-     */
+    #[Override]
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->propertyName  = 'MyItem';
+        $this->mockedMatcher = mock(Matcher::class);
+
+        $this->subject = new HasProperty($this->propertyName, $this->mockedMatcher);
+    }
+
+    #[Test]
     public function hasProperty(): void
     {
         $subject = HasProperty::hasProperty(
             'propertyName',
-            'propertyValue'
+            'propertyValue',
         );
 
+        // @phpstan-ignore-next-line
         self::assertInstanceOf(HasProperty::class, $subject);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function describeTo(): void
     {
         $mockedDescription = mock(Description::class);
         $mockedDescription->shouldReceive('appendText')->once()
             ->with(
                 'an object with public property "' . $this->propertyName
-                . '" with a value matching '
+                . '" with a value matching ',
             );
         $this->mockedMatcher->shouldReceive('describeTo')->once()
             ->with($mockedDescription);
@@ -52,34 +63,30 @@ class HasPropertyTest extends DevToolsTestCase
         $this->subject->describeTo($mockedDescription);
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     *
-     * @return array<mixed>
-     */
-    public function matchesReturnsExpectedResultDataProvider(): array
+    /** @return array<mixed> */
+    public static function matchesReturnsExpectedResultDataProvider(): array
     {
         return [
             'object without property' => [new stdClass(), 'bla', 'blub', false],
-            'object with property'    => [
+            'object with property' => [
                 new HasPropertyFixture(),
                 'bla',
                 'blub',
                 true,
             ],
-            'object with getter'      => [
+            'object with getter' => [
                 new HasPropertyFixture(),
                 'getable',
                 'blub',
                 true,
             ],
-            'object with isser'       => [
+            'object with isser' => [
                 new HasPropertyFixture(),
                 'issable',
                 true,
                 true,
             ],
-            'object with hasser'      => [
+            'object with hasser' => [
                 new HasPropertyFixture(),
                 'hassable',
                 true,
@@ -88,11 +95,8 @@ class HasPropertyTest extends DevToolsTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider matchesReturnsExpectedResultDataProvider
-     *
-     */
+    #[Test]
+    #[DataProvider('matchesReturnsExpectedResultDataProvider')]
     public function matchesSafelyReturnsExpectedResult(
         HasPropertyFixture|stdClass $item,
         string $propertyName,
@@ -104,9 +108,7 @@ class HasPropertyTest extends DevToolsTestCase
         self::assertSame($expectedResult, $result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function describeMismatchSafelyReturnsExpectedResult(): void
     {
         $item          = new stdClass();
@@ -123,29 +125,25 @@ class HasPropertyTest extends DevToolsTestCase
                         . '"get' . ucfirst($propertyName) . '()", "' . $propertyName . '()", "is'
                         . ucfirst($propertyName)
                         . '()", "has' . ucfirst($propertyName) . '()", "__get()", '
-                        . '"__call()" exist and have public access in class "stdClass" '
-                    )
+                        . '"__call()" exist and have public access in class "stdClass" ',
+                    ),
                 )->orElse(
-                    is('can\'t get a way to read the property "bla" in class "stdClass" ')
-                )
+                    is('can\'t get a way to read the property "bla" in class "stdClass" '),
+                ),
             )->andReturnSelf();
 
         $subject = HasProperty::hasProperty($propertyName, $propertyValue);
         $subject->describeMismatchSafely($item, $mockedDescription);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function matchesSafelyParameterNeedsToBeObject(): void
     {
         $result = $this->subject->matches('asd');
         self::assertFalse($result);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function diagnosticDescriptionIsForwarded(): void
     {
         $forgedObject      = new stdClass();
@@ -159,13 +157,5 @@ class HasPropertyTest extends DevToolsTestCase
 
         $subject = new HasProperty('bla', $mockedMatcher);
         $subject->matchesSafely($forgedObject);
-    }
-
-    protected function setUp(): void
-    {
-        $this->propertyName  = 'MyItem';
-        $this->mockedMatcher = mock(Matcher::class);
-
-        $this->subject = new HasProperty($this->propertyName, $this->mockedMatcher);
     }
 }

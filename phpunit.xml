@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit
-        executionOrder="random"
-        resolveDependencies="true"
-        beStrictAboutTestsThatDoNotTestAnything="false"
-        colors="true"
-        bootstrap="vendor/autoload.php">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         cacheDirectory=".phpunit.cache"
+         executionOrder="depends,defects"
+         requireCoverageMetadata="true"
+         beStrictAboutCoverageMetadata="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutTestsThatDoNotTestAnything="false"
+         displayDetailsOnPhpunitDeprecations="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         failOnPhpunitDeprecation="true"
+         failOnRisky="true"
+         failOnWarning="true">
     <testsuites>
-        <testsuite name="AllUnitTests">
-            <directory>./test/Unit/</directory>
-            <directory>./test/Integration/</directory>
+        <testsuite name="default">
+            <directory>test</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
-        </whitelist>
-    </filter>
-    <logging>
-        <log type="coverage-text" target="php://stdout"/>
-        <log type="coverage-xml" target="./tmp/phpunit/coverage-xml"/>
-        <log type="coverage-clover" target="./tmp/phpunit/clover.xml"/>
-        <log type="junit" target="./tmp/phpunit/junit.xml"/>
-    </logging>
+
+    <source ignoreIndirectDeprecations="true">
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
 </phpunit>
