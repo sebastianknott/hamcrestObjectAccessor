@@ -24,10 +24,11 @@ class HasProperty extends TypeSafeDiagnosingMatcher
 
     /**
      * HasProperty constructor.
-     *
      */
-    public function __construct(private string $propertyName, private Matcher $propertyValueMatcher)
-    {
+    public function __construct(
+        private string $propertyName,
+        private Matcher $propertyValueMatcher,
+    ) {
         parent::__construct(TypeSafeMatcher::TYPE_OBJECT);
 
         $this->accessor = PropertyAccess::createPropertyAccessorBuilder()
@@ -56,9 +57,12 @@ class HasProperty extends TypeSafeDiagnosingMatcher
      */
 
     #[Override]
-    protected function matchesSafelyWithDiagnosticDescription(mixed $item, Description $mismatchDescription): ?bool
-    {
+    protected function matchesSafelyWithDiagnosticDescription(
+        mixed $item,
+        Description $mismatchDescription,
+    ): ?bool {
         $propertyValue = null;
+
         try {
             $propertyValue = $this->accessor->getValue($item, $this->propertyName);
             $this->propertyValueMatcher->describeMismatch($propertyValue, $mismatchDescription);
@@ -72,11 +76,11 @@ class HasProperty extends TypeSafeDiagnosingMatcher
 
     /**
      * Static factory method.
-     *
-     *
      */
-    public static function hasProperty(string $propertyName, mixed $propertyValueMatcher): HasProperty
-    {
+    public static function hasProperty(
+        string $propertyName,
+        mixed $propertyValueMatcher,
+    ): self {
         return new self($propertyName, Util::wrapValueWithIsEqual($propertyValueMatcher));
     }
 }
