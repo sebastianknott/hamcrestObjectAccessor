@@ -30,6 +30,7 @@ class HasPropertyTest extends MockeryTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->propertyName  = 'MyItem';
         $this->mockedMatcher = mock(Matcher::class);
 
@@ -115,8 +116,8 @@ class HasPropertyTest extends MockeryTestCase
         $propertyName  = 'bla';
         $propertyValue = 'blub';
 
-        /** @var MockInterface|Description $mockedDescription */
         $mockedDescription = mock(Description::class);
+
         $mockedDescription->shouldReceive('appendText')->once()
             ->with(
                 Matchers::either(

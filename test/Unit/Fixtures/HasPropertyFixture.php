@@ -1,4 +1,5 @@
 <?php
+// phpcs:ignoreFile -- this is just a fixture
 
 declare(strict_types=1);
 
